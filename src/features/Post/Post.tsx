@@ -1,4 +1,4 @@
-import { Badge, IconButton, Stack, Typography } from "@mui/material";
+import { Badge, IconButton, Link, Stack, Typography } from "@mui/material";
 import PostCard from "../PostCard";
 import {
   ThumbUp,
@@ -9,6 +9,8 @@ import {
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { IPost, addReaction } from "../Posts/postsSlice";
+import { useState } from "react";
+import { formatDistance } from "date-fns";
 
 const reactionsMap: { [key: string]: any } = {
   like: <ThumbUp color="primary" />,
@@ -18,8 +20,9 @@ const reactionsMap: { [key: string]: any } = {
   sad: <MoodBad color="warning" />,
 };
 
-const Post = ({ title, id, description, reactions }: IPost) => {
+const Post = ({ title, id, body, reactions, date }: IPost) => {
   const dispatch = useDispatch();
+  const [description, setDescription] = useState(body?.substring(0, 300) || "");
   const reactToPost = (reaction: string) => {
     dispatch(addReaction({ postId: id, reaction }));
   };
@@ -29,11 +32,29 @@ const Post = ({ title, id, description, reactions }: IPost) => {
         <Typography variant="h5" fontWeight="700">
           {title}
         </Typography>
-        <Typography variant="body1">{description}</Typography>
+        <Typography variant="body1">
+          {description}{" "}
+          {body.length > 300 && (
+            <Link
+              onClick={() =>
+                setDescription(
+                  body === description ? body.substring(0, 300) : body
+                )
+              }
+            >
+              {body === description ? "Read less" : "Read more"}
+            </Link>
+          )}
+        </Typography>
+
+        <Typography variant="body2">
+          {formatDistance(date, new Date(), { addSuffix: true })}
+        </Typography>
+
         <Stack pt={2} direction="row">
           {Object.entries(reactions).map(([reaction, count]) => {
             return (
-              <IconButton onClick={() => reactToPost(reaction)}>
+              <IconButton key={reaction} onClick={() => reactToPost(reaction)}>
                 <Badge badgeContent={count.toString()} color="error">
                   {reactionsMap[reaction]}
                 </Badge>

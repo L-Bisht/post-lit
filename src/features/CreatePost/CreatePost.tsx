@@ -1,24 +1,26 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import PostCard from "../PostCard";
 import { FormEvent, useState } from "react";
-import { useDispatch } from "react-redux";
 import { addNewPost } from "../Posts/postsSlice";
-import { nanoid } from "@reduxjs/toolkit";
+import { useAppDispatch } from "../../customHooks";
+import { useNavigate } from "react-router-dom";
 
-type Props = {};
-
-const CreatePost = (props: Props) => {
+const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const handlePostSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!(title && description)) {
       return;
     }
-    dispatch(addNewPost(title, description));
-    setTitle("");
-    setDescription("");
+    try {
+      dispatch(addNewPost({ title, body: description })).unwrap();
+      navigate("/post/123");
+    } catch (err) {
+      console.log("Error", err);
+    }
   };
   return (
     <PostCard variant="outlined">

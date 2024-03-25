@@ -1,23 +1,58 @@
-import { Box, Stack, Typography } from "@mui/material";
-import Post from "../Post";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { postsSelector } from "./postsSlice";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  fetchPosts,
+  postsSelector,
+  getPostsStatus,
+  getPostsError,
+  // getPostsError,
+} from "./postsSlice";
 import CreatePost from "../CreatePost";
+import { useAppDispatch } from "../../customHooks";
+import Post from "../Post";
+import withLoader from "../withLoader";
+import { useNavigate } from "react-router-dom";
 
 const Posts = () => {
+  const dispatch = useAppDispatch();
   const posts = useSelector(postsSelector);
+  const postsStatus = useSelector(getPostsStatus);
+  const postsError = useSelector(getPostsError);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (postsStatus === "idle") {
+      dispatch(fetchPosts());
+    }
+  }, [postsStatus, dispatch]);
+
+  const PostList = () => (
+    <>
+      {posts.map((post) => {
+        return <Post key={post.id} {...post} />;
+      })}
+    </>
+  );
   return (
-    <Box flex={4} p={2}>
+    <>
       <Stack direction="column" spacing={3}>
-        <CreatePost />
-        <Typography variant="h3" fontWeight="700">
-          Existing posts
-        </Typography>
-        {posts.map((post) => {
-          return <Post key={post.id} {...post} />;
-        })}
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="h4" fontWeight="700">
+            Posts
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{ borderRadius: "24px" }}
+            onClick={() => navigate("post")}
+          >
+            new post
+          </Button>
+        </Stack>
+        {withLoader(<PostList />, postsStatus, postsError)}
       </Stack>
-    </Box>
+    </>
   );
 };
 
