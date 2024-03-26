@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import {
   fetchPosts,
   postsSelector,
@@ -8,7 +8,6 @@ import {
   getPostsError,
   // getPostsError,
 } from "./postsSlice";
-import CreatePost from "../CreatePost";
 import { useAppDispatch } from "../../customHooks";
 import Post from "../Post";
 import withLoader from "../withLoader";
@@ -31,7 +30,7 @@ const Posts = () => {
   const PostList = () => (
     <>
       {posts.map((post) => {
-        return <Post key={post.id} {...post} />;
+        return <Post key={post.id.toString()} {...post} />;
       })}
     </>
   );

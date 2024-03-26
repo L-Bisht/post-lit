@@ -10,14 +10,18 @@ const CreatePost = () => {
   const [description, setDescription] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const handlePostSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handlePostSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!(title && description)) {
       return;
     }
     try {
-      dispatch(addNewPost({ title, body: description })).unwrap();
-      navigate("/post/123");
+      const response = await dispatch(
+        addNewPost({ title, body: description })
+      ).unwrap();
+      navigate(`${response.id}`);
+      setTitle("");
+      setDescription("");
     } catch (err) {
       console.log("Error", err);
     }

@@ -6,7 +6,7 @@ import { sub } from "date-fns";
 const POSTS_URL = "https://dummyjson.com/posts";
 const ADD_POST_URL = "https://dummyjson.com/posts/add";
 export interface IPost {
-  id: string;
+  id: Number;
   title: string;
   body: string;
   date: string;
@@ -158,6 +158,8 @@ const postsSlice = createSlice({
 export const postsSelector = (state: TRootState) => state.posts.posts;
 export const getPostsStatus = (state: TRootState) => state.posts.status;
 export const getPostsError = (state: TRootState) => state.posts.error;
+export const getPostById = (state: TRootState, id: Number) =>
+  state.posts.posts.find(({ id: postId }) => postId === id);
 
 export const { createNewPost, addReaction } = postsSlice.actions;
 
