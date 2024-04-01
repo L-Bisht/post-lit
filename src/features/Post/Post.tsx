@@ -7,10 +7,11 @@ import {
   Mood,
   MoodBad,
 } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
-import { IPost, addReaction } from "../Posts/postsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { IPost, addReaction, getPostById } from "../Posts/postsSlice";
 import { useState } from "react";
 import { formatDistance } from "date-fns";
+import { TRootState } from "../../store";
 
 const reactionsMap: { [key: string]: any } = {
   like: <ThumbUp color="primary" />,
@@ -20,8 +21,14 @@ const reactionsMap: { [key: string]: any } = {
   sad: <MoodBad color="warning" />,
 };
 
-const Post = ({ title, id, body, reactions, date }: IPost) => {
+const Post = ({ id }: { id: Number }) => {
   const dispatch = useDispatch();
+  const {
+    title = "",
+    body = "",
+    reactions = "",
+    date = "",
+  } = useSelector((state: TRootState) => getPostById(state, id)) as IPost;
   const [description, setDescription] = useState(body?.substring(0, 300) || "");
   const reactToPost = (reaction: string) => {
     dispatch(addReaction({ postId: id, reaction }));

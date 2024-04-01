@@ -49,33 +49,6 @@ const initialState: IInitialState = {
   status: "idle",
 };
 
-/* const initialState: Array<IPost> = [
-  {
-    id: "aswqs_12ef",
-    title: "New bike",
-    description: "Bought a new bike today",
-    reactions: {
-      like: 9,
-      dislike: 0,
-      love: 2,
-      laugh: 3,
-      sad: 0,
-    },
-  },
-  {
-    id: "aswqs_12eg",
-    title: "New Car",
-    description: "Dad bought a new car for me today",
-    reactions: {
-      like: 9,
-      dislike: 0,
-      love: 2,
-      laugh: 3,
-      sad: 0,
-    },
-  },
-]; */
-
 const postsSlice = createSlice({
   name: "posts",
   initialState,

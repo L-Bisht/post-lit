@@ -13,6 +13,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -45,13 +46,19 @@ const Search = styled(Box)({
 });
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <AppBar position="sticky">
       <StyledToolbar>
-        <Typography sx={{ display: { xs: "none", md: "block" } }} variant="h6">
-          postLit
-        </Typography>
-        <BoltIcon sx={{ display: { xs: "block", md: "none" } }} />
+        <Box onClick={() => navigate("/post-lit")}>
+          <Typography
+            sx={{ display: { xs: "none", md: "block" } }}
+            variant="h6"
+          >
+            postLit
+          </Typography>
+          <BoltIcon sx={{ display: { xs: "block", md: "none" } }} />
+        </Box>
         <Search>
           <InputBase
             sx={{ ml: 1, flex: 1 }}

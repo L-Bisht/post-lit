@@ -30,7 +30,7 @@ const Posts = () => {
   const PostList = () => (
     <>
       {posts.map((post) => {
-        return <Post key={post.id.toString()} {...post} />;
+        return <Post key={post.id.toString()} id={post.id} />;
       })}
     </>
   );
