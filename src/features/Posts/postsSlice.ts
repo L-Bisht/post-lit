@@ -5,14 +5,16 @@ import { sub } from "date-fns";
 
 const POSTS_URL = "https://dummyjson.com/posts";
 const ADD_POST_URL = "https://dummyjson.com/posts/add";
+
+export interface IReactions {
+  [reaction: string]: number;
+}
 export interface IPost {
   id: Number;
   title: string;
   body: string;
   date: string;
-  reactions: {
-    [reaction: string]: number; // Index signature allows any string as key
-  };
+  reactions: IReactions;
 }
 interface IInitialState {
   posts: IPost[];

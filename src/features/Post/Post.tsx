@@ -1,38 +1,20 @@
-import { Badge, IconButton, Link, Stack, Typography } from "@mui/material";
+import { Link, Stack, Typography } from "@mui/material";
 import PostCard from "../PostCard";
-import {
-  ThumbUp,
-  ThumbDown,
-  Favorite,
-  Mood,
-  MoodBad,
-} from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { IPost, addReaction, getPostById } from "../Posts/postsSlice";
+import { useSelector } from "react-redux";
+import { IPost, getPostById } from "../Posts/postsSlice";
 import { useState } from "react";
 import { formatDistance } from "date-fns";
 import { TRootState } from "../../store";
-
-const reactionsMap: { [key: string]: any } = {
-  like: <ThumbUp color="primary" />,
-  dislike: <ThumbDown color="primary" />,
-  love: <Favorite color="error" />,
-  laugh: <Mood color="warning" />,
-  sad: <MoodBad color="warning" />,
-};
+import Reactions from "../Reactions";
 
 const Post = ({ id }: { id: Number }) => {
-  const dispatch = useDispatch();
   const {
     title = "",
     body = "",
-    reactions = "",
+    reactions = {},
     date = "",
   } = useSelector((state: TRootState) => getPostById(state, id)) as IPost;
   const [description, setDescription] = useState(body?.substring(0, 300) || "");
-  const reactToPost = (reaction: string) => {
-    dispatch(addReaction({ postId: id, reaction }));
-  };
   return (
     <PostCard variant="outlined" sx={{ padding: "12px" }}>
       <Stack direction="column" spacing={1}>
@@ -53,22 +35,10 @@ const Post = ({ id }: { id: Number }) => {
             </Link>
           )}
         </Typography>
-
         <Typography variant="body2">
           {formatDistance(date, new Date(), { addSuffix: true })}
         </Typography>
-
-        <Stack pt={2} direction="row">
-          {Object.entries(reactions).map(([reaction, count]) => {
-            return (
-              <IconButton key={reaction} onClick={() => reactToPost(reaction)}>
-                <Badge badgeContent={count.toString()} color="error">
-                  {reactionsMap[reaction]}
-                </Badge>
-              </IconButton>
-            );
-          })}
-        </Stack>
+        <Reactions reactions={reactions} postId={id} />
       </Stack>
     </PostCard>
   );
